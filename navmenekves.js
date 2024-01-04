@@ -1,64 +1,73 @@
 const enemySpeed = 2;
 
-function createSquare(top, left) {
-    const square = document.createElement("div");
-    square.className = "square";
-    square.style.top = top + "px";
-    square.style.left = left + "px";
-    document.body.appendChild(square);
+function createSquare(ctx, top, left) {
+    const square = {
+        top: top,
+        left: left,
+        width: 50,
+        height: 50,
+        draw: function () {
+            ctx.fillRect(this.left, this.top, this.width, this.height);
+        }
+    };
     return square;
 }
 
 function move(square, targetX, targetY, speed) {
-    const squareRect = square.getBoundingClientRect();
-    const deltaX = targetX - squareRect.left;
-    const deltaY = targetY - squareRect.top;
+    const deltaX = targetX - square.left;
+    const deltaY = targetY - square.top;
 
     const distance = Math.hypot(deltaX, deltaY);
 
     if (distance > 1) {
         const ratio = speed / distance;
-        const newX = squareRect.left + deltaX * ratio;
-        const newY = squareRect.top + deltaY * ratio;
-
-        square.style.left = newX + "px";
-        square.style.top = newY + "px";
+        square.left += deltaX * ratio;
+        square.top += deltaY * ratio;
     }
 }
 
-const square1 = createSquare(0, 0);
-const square2 = createSquare(0, window.innerWidth - 50);
-const square3 = createSquare(window.innerHeight - 50, 0);
-const square4 = createSquare(window.innerHeight - 50, window.innerWidth - 50);
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
 
-const player = createSquare(window.innerHeight / 2, window.innerWidth / 2);
+const square1 = createSquare(ctx, 0, 0);
+const square2 = createSquare(ctx, 0, canvas.width - 50);
+const square3 = createSquare(ctx, canvas.height - 50, 0);
+const square4 = createSquare(ctx, canvas.height - 50, canvas.width - 50);
 
+const player = createSquare(ctx, canvas.height / 2, canvas.width / 2);
 
 function moveSquares() {
-    move(square1, player.offsetLeft, player.offsetTop, enemySpeed);
-    move(square2, player.offsetLeft, player.offsetTop, enemySpeed);
-    move(square3, player.offsetLeft, player.offsetTop, enemySpeed);
-    move(square4, player.offsetLeft, player.offsetTop, enemySpeed);
+    move(square1, player.left, player.top, enemySpeed);
+    move(square2, player.left, player.top, enemySpeed);
+    move(square3, player.left, player.top, enemySpeed);
+    move(square4, player.left, player.top, enemySpeed);
 
     requestAnimationFrame(moveSquares);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+    square1.draw();
+    square2.draw();
+    square3.draw();
+    square4.draw();
+    player.draw();
 }
 
 moveSquares();
 
 document.addEventListener("keydown", function (event) {
-    const step = 10; 
+    const step = 10;
     switch (event.key) {
         case "ArrowUp":
-            player.style.top = Math.max(0, player.offsetTop - step) + "px";
+            player.top = Math.max(0, player.top - step);
             break;
         case "ArrowDown":
-            player.style.top = Math.min(window.innerHeight - player.offsetHeight, player.offsetTop + step) + "px";
+            player.top = Math.min(canvas.height - player.height, player.top + step);
             break;
         case "ArrowLeft":
-            player.style.left = Math.max(0, player.offsetLeft - step) + "px";
+            player.left = Math.max(0, player.left - step);
             break;
         case "ArrowRight":
-            player.style.left = Math.min(window.innerWidth - player.offsetWidth, player.offsetLeft + step) + "px";
+            player.left = Math.min(canvas.width - player.width, player.left + step);
             break;
     }
 });
