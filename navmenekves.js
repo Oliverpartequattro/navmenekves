@@ -30,12 +30,20 @@ function handleCollision(square, otherSquare) {
     const overlapX = Math.max(0, Math.min(square.left + square.width, otherSquare.left + otherSquare.width) - Math.max(square.left, otherSquare.left));
     const overlapY = Math.max(0, Math.min(square.top + square.height, otherSquare.top + otherSquare.height) - Math.max(square.top, otherSquare.top));
 
-    if (overlapX < overlapY) {
-        square.left += square.left < otherSquare.left ? -overlapX : overlapX;
+ if (overlapX < overlapY) {
+    if (square.left < otherSquare.left) {
+        square.left += -overlapX;
     } else {
-        square.top += square.top < otherSquare.top ? -overlapY : overlapY;
+        square.left += overlapX;
     }
-}
+} else {
+    if (square.top < otherSquare.top) {
+        square.top += -overlapY;
+    } else {
+        square.top += overlapY;
+    }
+}}
+
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
