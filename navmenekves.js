@@ -96,8 +96,12 @@ function handleCollision(square1, square2)
 }
 
 var points = 0
+var playerAmmo = 0
+
 const enemyBase = createObjectColor(ctx, "enemyBase", 50, 250, "red", 250, 0);
 const moneyBase = createObjectColor(ctx, "moneyBase", 50, 250, "red", 250, canvas.width-50);
+
+const player = createObjectColor(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
 
 const enemy1 = createObjectImg(ctx, 'enemy1', 50, 50, "tek.jpg", 275, 0);
 const enemy2 = createObjectImg(ctx, 'enemy2', 50, 50, "tek.jpg", 325, 0);
@@ -114,7 +118,10 @@ const movable3 = createObjectImg(ctx, 'movable3', 50, 50, "money.jpg", 375, 150)
 const movable4 = createObjectImg(ctx, 'movable4', 50, 50, "money.jpg", 425, 150);
 const movable5 = createObjectImg(ctx, 'movable5', 50, 50, "money.jpg", 475, 150);
 
-const player = createObjectColor(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
+const ammo1 = createObjectImg(ctx, 'ammo1', 50, 50, "ammo.jpg", 425, 400);
+const ammo2 = createObjectImg(ctx, 'ammo2', 50, 50, "ammo.jpg", 475, 400);
+
+
 
 function start() 
 {
@@ -124,12 +131,15 @@ function start()
 
     ctx.fillStyle = "black";
     ctx.font = "bold 18px Comic Sans MS"
-    ctx.fillText(`Pontszám: ${points}`, 10, 30);
-
+    ctx.fillText(`Pontszám: ${points}`, 10, 20);
+    ctx.fillText(`Lőszer: ${playerAmmo}`, canvas.width - 90, 20);
+    
     const enemies = [enemy1, enemy2, enemy3, enemy4];
     const obstacles = [obstacle1, obstacle2, obstacle3]
     const movables = [movable1, movable2, movable3, movable4, movable5]
+    const ammos = [ammo1, ammo2]
 
+    
     enemies.forEach(enemy => move(enemy, player.left, player.top, enemySpeed));
 
     for (let i = 0; i < enemies.length - 1; i++) 
@@ -190,6 +200,19 @@ function start()
          }
      } //movable enemy collision
 
+     for (let i = 0; i < ammos.length; i++) 
+     {
+          if (checkCollision(ammos[i], player)) 
+          {
+            if (!ammos[i].collided) {
+                playerAmmo += 1;
+                ammos[i].collided = true; 
+            }
+            ammos.splice(i, 1);
+            i -= 1;
+          }
+      } //ammo player collision
+
 
 
      for (let i = 0; i < movables.length; i++) 
@@ -198,7 +221,7 @@ function start()
           {
             if (!movables[i].collided) {
                 points += 1;
-                movables[i].collided = true;  // Set a flag to indicate the collision
+                movables[i].collided = true; 
             }
             movables.splice(i, 1);
             i -= 1;
@@ -206,17 +229,19 @@ function start()
       } //movable moneyBase collision
 
       movables.forEach(movable => movable.collided = false);
+      ammos.forEach(ammo => ammo.collided = false);
 
 
     requestAnimationFrame(start);
 
+    player.draw();
     enemyBase.draw();
     moneyBase.draw();
     enemies.forEach(enemy => enemy.draw());
     obstacles.forEach(obstacle => obstacle.draw());
     movables.forEach(movable => movable.draw());
-    player.draw();
-
+    ammos.forEach(ammo => ammo.draw());
+    
     if(end)
     {
         console.log('asd2')
