@@ -96,21 +96,26 @@ function handleCollision(square, otherSquare)
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const money1 = createObjectColor(ctx, 'money1', 150, 50, "red", 100, 100);
-const money2 = createObjectColor(ctx, 'money2', 150, 50, "red", 200, 200);
-const money3 = createObjectColor(ctx, 'money3', 150, 50, "red", 300, 300);
+const enemyBase = createObjectColor(ctx, "enemyBase", 50, 250, "red", 250, 0);
+const moneyBase = createObjectColor(ctx, "moneyBase", 50, 250, "red", 250, canvas.width-50);
 
-const square1 = createObjectImg(ctx, 'square1', 50, 50, "tek.jpg", 0, 0);
-const square2 = createObjectImg(ctx, 'square2', 50, 50, "tek.jpg", 0, canvas.width - 50);
-const square3 = createObjectImg(ctx, 'square3', 50, 50, "tek.jpg", canvas.height - 50, 0);
-const square4 = createObjectImg(ctx, 'square4', 50, 50, "tek.jpg", canvas.height - 50, canvas.width - 50);
+const obstacle1 = createObjectColor(ctx, 'obstacle1', 150, 5, "red", 100, 100);
+const obstacle2 = createObjectColor(ctx, 'obstacle2', 150, 5, "red", 200, 200);
+const obstacle3 = createObjectColor(ctx, 'obstacle3', 150, 5, "red", 300, 300);
+
+const square1 = createObjectImg(ctx, 'square1', 50, 50, "tek.jpg", 275, 0);
+const square2 = createObjectImg(ctx, 'square2', 50, 50, "tek.jpg", 325, 0);
+const square3 = createObjectImg(ctx, 'square3', 50, 50, "tek.jpg", 375, 0);
+const square4 = createObjectImg(ctx, 'square4', 50, 50, "tek.jpg", 425, 0);
 const player = createObjectColor(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
 
 function start() 
 {
+    end = false
+
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     const squares = [square1, square2, square3, square4];
-    const moneys = [money1, money2, money3]
+    const obstacles = [obstacle1, obstacle2, obstacle3]
 
     squares.forEach(square => move(square, player.left, player.top, enemySpeed));
 
@@ -134,21 +139,21 @@ function start()
             }
     } //enemy player collision
 
-    // for (let i = 0; i < moneys.length; i++) 
-    // {
-    //     if (checkCollision(player, moneys[i])) 
-    //     {
-    //            handleCollision(player, moneys[i]);
-    //     }
-    // } //object player collision
+    for (let i = 0; i < obstacles.length; i++) 
+    {
+        if (checkCollision(player, obstacles[i])) 
+        {
+               handleCollision(player, obstacles[i]);
+        }
+    } //object player collision
 
-    for (let i = 0; i < moneys.length; i++) 
+    for (let i = 0; i < obstacles.length; i++) 
     {
         for (let j = 0; j < squares.length; j++) 
         {
-            if (checkCollision(squares[j], moneys[i])) 
+            if (checkCollision(squares[j], obstacles[i])) 
             {
-                handleCollision(squares[j], moneys[i]);
+                handleCollision(squares[j], obstacles[i]);
             }
         }
     } //object enemy collision
@@ -163,12 +168,19 @@ function start()
 
     requestAnimationFrame(start);
 
+    enemyBase.draw();
+    moneyBase.draw();
     squares.forEach(square => square.draw());
-    moneys.forEach(money => money.draw());
+    obstacles.forEach(obstacle => obstacle.draw());
     player.draw();
+
+    if(end)
+    {
+        console.log('asd2')
+    }
 }
 
-start()
+
 
 document.addEventListener("keydown", function (event) 
 {
