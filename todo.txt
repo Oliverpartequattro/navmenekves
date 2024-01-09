@@ -1,6 +1,5 @@
 if(end)
 palya
-robbanas effekt ha kill
-lassito?
 palya szele collision
 a mozgas csak akkor kezdodik ha masik gomb van megnyomva
+robbanasok el vannak csuszva
