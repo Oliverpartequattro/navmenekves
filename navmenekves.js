@@ -202,6 +202,17 @@ function start()
          }
      } //movable enemy collision
 
+     for (let i = 0; i < movables.length; i++) 
+     {
+         for (let j = 0; j < obstacles.length; j++) 
+         {
+             if (checkCollision(obstacles[j], movables[i])) 
+             {
+                 handleCollision(movables[i], obstacles[j]);
+             }
+         }
+     } //movable obstacle collision
+
      for (let i = 0; i < ammos.length; i++) 
      {
           if (checkCollision(ammos[i], player)) 
