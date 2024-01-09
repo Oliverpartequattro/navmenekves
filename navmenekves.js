@@ -97,6 +97,10 @@ function handleCollision(square1, square2)
 
 var points = 0
 var playerAmmo = 0
+var enemies = [];
+var obstacles = []
+var movables = []
+var ammos = []
 
 const enemyBase = createObjectColor(ctx, "enemyBase", 50, 250, "red", 250, 0);
 const moneyBase = createObjectColor(ctx, "moneyBase", 50, 250, "red", 250, canvas.width-50);
@@ -121,7 +125,8 @@ const movable5 = createObjectImg(ctx, 'movable5', 50, 50, "money.jpg", 475, 150)
 const ammo1 = createObjectImg(ctx, 'ammo1', 50, 50, "ammo.jpg", 425, 400);
 const ammo2 = createObjectImg(ctx, 'ammo2', 50, 50, "ammo.jpg", 475, 400);
 
-
+enemies.push(enemy1, enemy2, enemy3, enemy4);
+ammos.push(ammo1, ammo2)
 
 function start() 
 {
@@ -134,11 +139,8 @@ function start()
     ctx.fillText(`Pontszám: ${points}`, 10, 20);
     ctx.fillText(`Lőszer: ${playerAmmo}`, canvas.width - 90, 20);
     
-    const enemies = [enemy1, enemy2, enemy3, enemy4];
-    const obstacles = [obstacle1, obstacle2, obstacle3]
-    const movables = [movable1, movable2, movable3, movable4, movable5]
-    const ammos = [ammo1, ammo2]
-
+    obstacles = [obstacle1, obstacle2, obstacle3]
+    movables = [movable1, movable2, movable3, movable4, movable5]
     
     enemies.forEach(enemy => move(enemy, player.left, player.top, enemySpeed));
 
@@ -157,7 +159,7 @@ function start()
     {
             if (checkCollision(enemies[i], player)) 
             {
-                console.log('asd')
+                //console.log('asd')
                 end = true
             }
     } //enemy player collision
@@ -244,11 +246,9 @@ function start()
     
     if(end)
     {
-        console.log('asd2')
+        //console.log('asd2')
     }
 }
-
-
 
 document.addEventListener("keydown", function (event) 
 {
@@ -267,6 +267,20 @@ document.addEventListener("keydown", function (event)
         case "ArrowRight":
             player.left = Math.min(canvas.width - player.width, player.left + step);
             break;
+        case "p":
+        case "P":
+            if (playerAmmo > 0) 
+            {
+                if (enemies.length > 0) 
+                {
+                    points += 3;
+                    const randomIndex = Math.floor(Math.random() * enemies.length);
+                    enemies.splice(randomIndex, 1); 
+                    playerAmmo -= 1; 
+                    console.log('KILL')
+                }
+             }
+               break;           
     }
 }
 );
