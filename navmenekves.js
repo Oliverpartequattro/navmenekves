@@ -1,9 +1,9 @@
 
 const enemySpeed = 2;
 
-function createSquare(ctx, id, top, left) 
+function createSquare(ctx, id, width, height, color, top, left) 
 {
-    return { id, top, left, width: 50, height: 50, draw: function () { ctx.fillStyle = 'red'; ctx.fillRect(this.left, this.top, this.width, this.height); } };
+    return { id, top, left, width: width, height: height, draw: function () { ctx.fillStyle = color; ctx.fillRect(this.left, this.top, this.width, this.height); } };
 }
 
 function move(square, targetX, targetY, speed) 
@@ -37,17 +37,23 @@ function handleCollision(square, otherSquare)
 
     if (overlapX < overlapY) 
     {
-        if (square.left < otherSquare.left) {
+        if (square.left < otherSquare.left) 
+        {
             square.left += -overlapX;
-        } else {
+        } 
+        else 
+        {
             square.left += overlapX;
         }
     }
     else 
     {
-        if (square.top < otherSquare.top) {
+        if (square.top < otherSquare.top) 
+        {
             square.top += -overlapY;
-        } else {
+        } 
+        else 
+        {
             square.top += overlapY;
         }
     }
@@ -56,21 +62,21 @@ function handleCollision(square, otherSquare)
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const money1 = createSquare(ctx, 'money1', 100, 100);
-const money2 = createSquare(ctx, 'money2', 200, 200);
-const money3 = createSquare(ctx, 'money3', 300, 300);
+const money1 = createSquare(ctx, 'money1', 150, 50, "red", 100, 100);
+const money2 = createSquare(ctx, 'money2', 150, 50, "red", 200, 200);
+const money3 = createSquare(ctx, 'money3', 150, 50, "red", 300, 300);
 
-const square1 = createSquare(ctx, 'square1', 0, 0);
-const square2 = createSquare(ctx, 'square2', 0, canvas.width - 50);
-const square3 = createSquare(ctx, 'square3', canvas.height - 50, 0);
-const square4 = createSquare(ctx, 'square4', canvas.height - 50, canvas.width - 50);
-const player = createSquare(ctx, 'player', canvas.height / 2, canvas.width / 2);
+const square1 = createSquare(ctx, 'square1', 50, 50, "blue", 0, 0);
+const square2 = createSquare(ctx, 'square2', 50, 50, "darkblue", 0, canvas.width - 50);
+const square3 = createSquare(ctx, 'square3', 50, 50, "yellow", canvas.height - 50, 0);
+const square4 = createSquare(ctx, 'square4', 50, 50, "orange", canvas.height - 50, canvas.width - 50);
+const player = createSquare(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
 
 function start() 
 {
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     const squares = [square1, square2, square3, square4];
-     const moneys = [money1, money2, money3]
+    const moneys = [money1, money2, money3]
 
     squares.forEach(square => move(square, player.left, player.top, enemySpeed));
 
@@ -94,13 +100,13 @@ function start()
             }
     } //enemy player collision
 
-    for (let i = 0; i < moneys.length; i++) 
-    {
-        if (checkCollision(player, moneys[i])) 
-        {
-               handleCollision(player, moneys[i]);
-        }
-    } //object player collision
+    // for (let i = 0; i < moneys.length; i++) 
+    // {
+    //     if (checkCollision(player, moneys[i])) 
+    //     {
+    //            handleCollision(player, moneys[i]);
+    //     }
+    // } //object player collision
 
     for (let i = 0; i < moneys.length; i++) 
     {
@@ -133,7 +139,8 @@ start()
 document.addEventListener("keydown", function (event) 
 {
     const step = 10;
-    switch (event.key) {
+    switch (event.key) 
+    {
         case "ArrowUp":
             player.top = Math.max(0, player.top - step);
             break;
