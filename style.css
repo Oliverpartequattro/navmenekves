@@ -1,6 +1,13 @@
 body {
+    font-family: Comic Sans MS;
     margin: 0;
     overflow: hidden;
+    background-color: aquamarine;
+}
+
+.title{
+    text-align: center;
+    width: 100%;
 }
 
 #square {
@@ -14,6 +21,6 @@ body {
 
 canvas {
     border: 1px solid #000;
-    margin-top: 50px;
-    margin-left: 50px;
+    margin-left: 100px;
+    background-color: bisque;
 }

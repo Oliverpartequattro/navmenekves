@@ -1,9 +1,43 @@
 
 const enemySpeed = 2;
 
-function createSquare(ctx, id, width, height, color, top, left) 
+function createObjectImg(ctx, id, width, height, img, top, left) 
 {
-    return { id, top, left, width: width, height: height, draw: function () { ctx.fillStyle = color; ctx.fillRect(this.left, this.top, this.width, this.height); } };
+    const objectImg = 
+    {
+        id,
+        top,
+        left,
+        width,
+        height,
+        image: new Image(),
+        draw: function () 
+        {
+            this.image.src = img;
+            ctx.drawImage(this.image, this.left, this.top, this.width, this.height);
+        }
+    };
+
+    return objectImg;
+}
+
+function createObjectColor(ctx, id, width, height, color, top, left) 
+{
+    const objectColor = 
+    {
+        id,
+        top,
+        left,
+        width,
+        height,
+        color,
+        draw: function()
+        {
+            ctx.fillStyle = color; ctx.fillRect(this.left, this.top, this.width, this.height)
+        }
+    }
+
+    return objectColor
 }
 
 function move(square, targetX, targetY, speed) 
@@ -62,15 +96,15 @@ function handleCollision(square, otherSquare)
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-const money1 = createSquare(ctx, 'money1', 150, 50, "red", 100, 100);
-const money2 = createSquare(ctx, 'money2', 150, 50, "red", 200, 200);
-const money3 = createSquare(ctx, 'money3', 150, 50, "red", 300, 300);
+const money1 = createObjectColor(ctx, 'money1', 150, 50, "red", 100, 100);
+const money2 = createObjectColor(ctx, 'money2', 150, 50, "red", 200, 200);
+const money3 = createObjectColor(ctx, 'money3', 150, 50, "red", 300, 300);
 
-const square1 = createSquare(ctx, 'square1', 50, 50, "blue", 0, 0);
-const square2 = createSquare(ctx, 'square2', 50, 50, "darkblue", 0, canvas.width - 50);
-const square3 = createSquare(ctx, 'square3', 50, 50, "yellow", canvas.height - 50, 0);
-const square4 = createSquare(ctx, 'square4', 50, 50, "orange", canvas.height - 50, canvas.width - 50);
-const player = createSquare(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
+const square1 = createObjectImg(ctx, 'square1', 50, 50, "tek.jpg", 0, 0);
+const square2 = createObjectImg(ctx, 'square2', 50, 50, "tek.jpg", 0, canvas.width - 50);
+const square3 = createObjectImg(ctx, 'square3', 50, 50, "tek.jpg", canvas.height - 50, 0);
+const square4 = createObjectImg(ctx, 'square4', 50, 50, "tek.jpg", canvas.height - 50, canvas.width - 50);
+const player = createObjectColor(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
 
 function start() 
 {
@@ -110,11 +144,11 @@ function start()
 
     for (let i = 0; i < moneys.length; i++) 
     {
-        for (let j = i + 1; j < squares.length - 1; j++) 
+        for (let j = 0; j < squares.length; j++) 
         {
-            if (checkCollision(squares[i], moneys[j])) 
+            if (checkCollision(squares[j], moneys[i])) 
             {
-                handleCollision(squares[i], moneys[j]);
+                handleCollision(squares[j], moneys[i]);
             }
         }
     } //object enemy collision
