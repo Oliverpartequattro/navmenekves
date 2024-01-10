@@ -106,6 +106,7 @@ function drawExplosions()
 }
 
 var points = 0
+var successfulMoney = 0
 var playerAmmo = 0
 var enemies = []
 var obstacles = []
@@ -124,20 +125,25 @@ const enemy2 = createObjectImg(ctx, 'enemy2', 50, 50, "tek.jpg", 325, 0);
 const enemy3 = createObjectImg(ctx, 'enemy3', 50, 50, "tek.jpg", 375, 0);
 const enemy4 = createObjectImg(ctx, 'enemy4', 50, 50, "tek.jpg", 425, 0);
 
-const obstacle1 = createObjectColor(ctx, 'obstacle1', 150, 5, "red", 100, 100);
-const obstacle2 = createObjectColor(ctx, 'obstacle2', 150, 5, "red", 200, 200);
-const obstacle3 = createObjectColor(ctx, 'obstacle3', 150, 5, "red", 300, 300);
+const obstacle1 = createObjectColor(ctx, 'obstacle1', 150, 5, "red", Math.random() * canvas.height, Math.random() * canvas.width);
+const obstacle2 = createObjectColor(ctx, 'obstacle2', 150, 5, "red", Math.random() * canvas.height, Math.random() * canvas.width);
+const obstacle3 = createObjectColor(ctx, 'obstacle3', 150, 5, "red", Math.random() * canvas.height, Math.random() * canvas.width);
+const obstacle4 = createObjectColor(ctx, 'obstacle3', 150, 5, "red", Math.random() * canvas.height, Math.random() * canvas.width);
+const obstacle5 = createObjectColor(ctx, 'obstacle3', 150, 5, "red", Math.random() * canvas.height, Math.random() * canvas.width);
+const obstacle6 = createObjectColor(ctx, 'obstacle3', 5, 150, "red", Math.random() * canvas.height, Math.random() * canvas.width);
+const obstacle7 = createObjectColor(ctx, 'obstacle3', 5, 150, "red", Math.random() * canvas.height, Math.random() * canvas.width);
 
-const movable1 = createObjectImg(ctx, 'movable1', 50, 50, "money.jpg", 275, 150);
-const movable2 = createObjectImg(ctx, 'movable2', 50, 50, "money.jpg", 325, 150);
-const movable3 = createObjectImg(ctx, 'movable3', 50, 50, "money.jpg", 375, 150);
-const movable4 = createObjectImg(ctx, 'movable4', 50, 50, "money.jpg", 425, 150);
-const movable5 = createObjectImg(ctx, 'movable5', 50, 50, "money.jpg", 475, 150);
 
-const ammo1 = createObjectImg(ctx, 'ammo1', 50, 50, "ammo.jpg", 425, 400);
-const ammo2 = createObjectImg(ctx, 'ammo2', 50, 50, "ammo.jpg", 475, 400);
+const movable1 = createObjectImg(ctx, 'movable1', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+const movable2 = createObjectImg(ctx, 'movable2', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+const movable3 = createObjectImg(ctx, 'movable3', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+const movable4 = createObjectImg(ctx, 'movable4', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+const movable5 = createObjectImg(ctx, 'movable5', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
 
-const slower1 = createObjectImg(ctx, 'slower1', 50, 50, "potion.jpg", 600, 400);
+const ammo1 = createObjectImg(ctx, 'ammo1', 50, 50, "ammo.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+const ammo2 = createObjectImg(ctx, 'ammo2', 50, 50, "ammo.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+
+const slower1 = createObjectImg(ctx, 'slower1', 50, 50, "potion.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
 
 enemies.push(enemy1, enemy2, enemy3, enemy4);
 ammos.push(ammo1, ammo2)
@@ -155,7 +161,7 @@ function start()
     ctx.fillText(`Lőszer: ${playerAmmo}`, canvas.width - 90, 20);
     ctx.fillText(`spd: ${enemySpeed}`, canvas.width - 300, 20);
     
-    obstacles = [obstacle1, obstacle2, obstacle3]
+    obstacles = [obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6, obstacle7]
     movables = [movable1, movable2, movable3, movable4, movable5]
 
     drawExplosions();
@@ -263,20 +269,26 @@ function start()
           {
             if (!movables[i].collided) {
                 points += 1;
+                successfulMoney += 1;
                 movables[i].collided = true; 
+                if(successfulMoney == 1)
+                {
+                  console.log('NYERESÉG');
+                  ctx.fillStyle = "black";
+                  ctx.font = "bold 40px Comic Sans MS"
+                  ctx.fillText("NYERESÉG", canvas.width /2 , canvas.height / 2);
+                }
             }
             movables.splice(i, 1);
             i -= 1;
           }
       } //movable moneyBase collision
 
+
+
       movables.forEach(movable => movable.collided = false);
       ammos.forEach(ammo => ammo.collided = false);
       slowers.forEach(slower => slower.collided = false);
-
-
-
-    requestAnimationFrame(start);
 
     player.draw();
     enemyBase.draw();
@@ -289,12 +301,17 @@ function start()
     
     if(end)
     {
-        //console.log('asd2')
+        console.log('VESZTESÉG')
     }
 }
 
+function startMove(){
+    requestAnimationFrame(start);
+    requestAnimationFrame(startMove);
+}
+
 var killedEnemy;
-const explosion = createObjectImg(ctx, 'explosion', 200, 200, "explosion.gif", 1000, 1000);
+const explosion = createObjectImg(ctx, 'explosion', 200, 200, "explosion.gif", 0, 0);
 
 document.addEventListener("keydown", function (event) 
 {
