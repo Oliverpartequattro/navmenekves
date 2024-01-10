@@ -133,7 +133,6 @@ const obstacle5 = createObjectColor(ctx, 'obstacle3', 150, 5, "red", Math.random
 const obstacle6 = createObjectColor(ctx, 'obstacle3', 5, 150, "red", Math.random() * canvas.height, Math.random() * canvas.width);
 const obstacle7 = createObjectColor(ctx, 'obstacle3', 5, 150, "red", Math.random() * canvas.height, Math.random() * canvas.width);
 
-
 const movable1 = createObjectImg(ctx, 'movable1', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
 const movable2 = createObjectImg(ctx, 'movable2', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
 const movable3 = createObjectImg(ctx, 'movable3', 50, 50, "money.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
@@ -159,7 +158,6 @@ function start()
     ctx.font = "bold 18px Comic Sans MS"
     ctx.fillText(`Pontszám: ${points}`, 10, 20);
     ctx.fillText(`Lőszer: ${playerAmmo}`, canvas.width - 90, 20);
-    ctx.fillText(`spd: ${enemySpeed}`, canvas.width - 300, 20);
     
     obstacles = [obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6, obstacle7]
     movables = [movable1, movable2, movable3, movable4, movable5]
@@ -302,6 +300,7 @@ function start()
     if(end)
     {
         console.log('VESZTESÉG')
+
     }
 }
 

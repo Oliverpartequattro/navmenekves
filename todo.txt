@@ -1,5 +1,4 @@
 if(end)
-palya
 palya szele collision
-a mozgas csak akkor kezdodik ha masik gomb van megnyomva
 robbanasok el vannak csuszva
+ciklusokkal az objektuomok
