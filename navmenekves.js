@@ -161,8 +161,8 @@ for (let i = 1; i <= 5; i++) {
 
         movableWidth = 50;
         movableHeight = 50;
-        top = Math.random() * (canvas.height - movableHeight);
-        left = Math.random() * (canvas.width - movableWidth);
+        top = Math.random() * (canvas.height - movableHeight - 100);
+        left = Math.random() * (canvas.width - movableWidth - 100);
 
     const movable = createObjectImg(ctx, `movable${i}`, movableWidth, movableHeight, "img/money.jpg", top, left);
     movables.push(movable);
