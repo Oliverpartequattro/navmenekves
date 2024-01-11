@@ -38,7 +38,6 @@ function createObjectColor(ctx, id, width, height, color, top, left)
             ctx.fillStyle = color; ctx.fillRect(this.left, this.top, this.width, this.height)
         }
     }
-
     return objectColor
 }
 
@@ -47,12 +46,29 @@ function move(square, targetX, targetY, speed)
     const deltaX = targetX - square.left;
     const deltaY = targetY - square.top;
     const distance = Math.hypot(deltaX, deltaY);
-square
+
     if (distance > 1) 
     {
         const ratio = speed / distance;
-        square.left += deltaX * ratio;
-        square.top += deltaY * ratio;
+        const nextLeft = square.left + deltaX * ratio;
+        const nextTop = square.top + deltaY * ratio;
+
+        if (
+            nextLeft >= 0 &&
+            nextLeft + square.width <= canvas.width &&
+            nextTop >= 0 &&
+            nextTop + square.height <= canvas.height
+            ) 
+        {
+            square.left = nextLeft;
+            square.top = nextTop;
+        }
+
+        else 
+        {
+            square.left = Math.max(0, Math.min(canvas.width - square.width, nextLeft));
+            square.top = Math.max(0, Math.min(canvas.height - square.height, nextTop));
+        }
     }
 }
 
@@ -121,7 +137,8 @@ const moneyBase = createObjectColor(ctx, "moneyBase", 50, 250, "red", 250, canva
 
 const player = createObjectImg(ctx, 'player', 50, 50, "img/player.jpg", canvas.height / 2, canvas.width / 2);
 
-for (let i = 1; i <= 4; i++) {
+for (let i = 1; i <= 4; i++) 
+{
     let enemyWidth, enemyHeight, top, left;
 
         enemyWidth = 50;
@@ -133,20 +150,21 @@ for (let i = 1; i <= 4; i++) {
     enemies.push(enemy);
 }
 
-for (let i = 1; i <= 8; i++) {
+for (let i = 1; i <= 8; i++) 
+{
     let obstacleWidth, obstacleHeight, top, left;
 
     if (i <= 5) 
     {
         obstacleWidth = 150;
-        obstacleHeight = 5;
+        obstacleHeight = 10;
         top = Math.random() * (canvas.height - obstacleHeight);
         left = Math.random() * (canvas.width - obstacleWidth);
     } 
 
     else 
     {
-        obstacleWidth = 5;
+        obstacleWidth = 10;
         obstacleHeight = 150;
         top = Math.random() * (canvas.height - obstacleHeight);
         left = Math.random() * (canvas.width - obstacleWidth);
@@ -156,7 +174,8 @@ for (let i = 1; i <= 8; i++) {
     obstacles.push(obstacle);
 }
 
-for (let i = 1; i <= 5; i++) {
+for (let i = 1; i <= 5; i++) 
+{
     let movableWidth, movableHeight, top, left;
 
         movableWidth = 50;
@@ -164,23 +183,24 @@ for (let i = 1; i <= 5; i++) {
         top = Math.random() * (canvas.height - movableHeight - 100);
         left = Math.random() * (canvas.width - movableWidth - 100);
 
-    const movable = createObjectImg(ctx, `movable${i}`, movableWidth, movableHeight, "img/money.jpg", top, left);
+    const movable = createObjectImg(ctx, `movable${i}`, movableWidth, movableHeight, "img/money.png", top, left);
     movables.push(movable);
 }
 
-for (let i = 1; i <= 2; i++) {
+for (let i = 1; i <= 2; i++) 
+{
     let ammoWidth, ammoHeight, top, left;
 
-        ammoWidth = 50;
+        ammoWidth = 20;
         ammoHeight = 50;
         top = Math.random() * (canvas.height - ammoHeight);
         left = Math.random() * (canvas.width - ammoWidth);
 
-    const ammo = createObjectImg(ctx, `ammo${i}`, ammoWidth, ammoHeight, "img/ammo.jpg", top, left);
+    const ammo = createObjectImg(ctx, `ammo${i}`, ammoWidth, ammoHeight, "img/ammo.png", top, left);
     ammos.push(ammo);
 }
 
-const slower1 = createObjectImg(ctx, 'slower1', 50, 50, "img/potion.jpg", Math.random() * canvas.height, Math.random() * canvas.width);
+const slower1 = createObjectImg(ctx, 'slower1', 50, 50, "img/potion.png", Math.random() * canvas.height, Math.random() * canvas.width);
 slowers.push(slower1)
 
 function start() 
@@ -344,9 +364,14 @@ function start()
     }
 }
 
-function startMove(){
+function startMove()
+{
     requestAnimationFrame(start);
     requestAnimationFrame(startMove);
+}
+function again()
+{
+    location.reload()
 }
 
 var killedEnemy;
