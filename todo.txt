@@ -1,4 +1,3 @@
 if(end)
 palya szele collision
 robbanasok el vannak csuszva
-ciklusokkal az objektuomok

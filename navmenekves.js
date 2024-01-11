@@ -119,7 +119,7 @@ var explosions = []
 const enemyBase = createObjectColor(ctx, "enemyBase", 50, 250, "red", 250, 0);
 const moneyBase = createObjectColor(ctx, "moneyBase", 50, 250, "red", 250, canvas.width-50);
 
-const player = createObjectColor(ctx, 'player', 50, 50, "black", canvas.height / 2, canvas.width / 2);
+const player = createObjectImg(ctx, 'player', 50, 50, "img/player.jpg", canvas.height / 2, canvas.width / 2);
 
 for (let i = 1; i <= 4; i++) {
     let enemyWidth, enemyHeight, top, left;
@@ -350,7 +350,7 @@ function startMove(){
 }
 
 var killedEnemy;
-const explosion = createObjectImg(ctx, 'explosion', 200, 200, "img/explosion.gif", 0, 0);
+const explosion = createObjectImg(ctx, 'explosion', 200, 200, "img/explosion.gif", 100, 100);
 
 document.addEventListener("keydown", function (event) 
 {
@@ -382,6 +382,8 @@ document.addEventListener("keydown", function (event)
                     enemies.splice(randomIndex, 1);
                     playerAmmo -= 1;
                     console.log('KILL')
+                    console.log(killedEnemy.left)
+                    console.log(killedEnemy.top)
                 }
              }
                break;           
