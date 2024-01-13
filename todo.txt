@@ -1,5 +1,0 @@
-if(end)
-palya szele collision
-robbanasok el vannak csuszva
-random fuggveny 
-grafika

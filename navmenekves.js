@@ -136,8 +136,8 @@ var ammos = []
 var slowers = []
 var explosions = []
 
-const enemyBase = createObjectColor(ctx, "enemyBase", 50, 250, "red", 250, 0);
-const moneyBase = createObjectColor(ctx, "moneyBase", 50, 250, "red", 250, canvas.width-50);
+const enemyBase = createObjectImg(ctx, "enemyBase", 100, 250, "img/door.png", 250, -30);
+const moneyBase = createObjectImg(ctx, "moneyBase", 100, 250, "img/window.png", 250, canvas.width - 70);
 
 const player = createObjectImg(ctx, 'player', 50, 50, "img/player.jpg", canvas.height / 2, canvas.width / 2);
 
@@ -160,20 +160,20 @@ for (let i = 1; i <= 8; i++) {
     if (i <= 5) 
     {
         obstacleWidth = 150;
-        obstacleHeight = 5;
+        obstacleHeight = 20;
         top = randInt(0, canvas.height - obstacleHeight);
         left = randInt(0, canvas.width - obstacleWidth);
     } 
 
     else 
     {
-        obstacleWidth = 5;
+        obstacleWidth = 20;
         obstacleHeight = 150;
         top = randInt(0, canvas.height - obstacleHeight);
         left = randInt(0, canvas.width - obstacleWidth);
     }
 
-    const obstacle = createObjectColor(ctx, `obstacle${i}`, obstacleWidth, obstacleHeight, "red", top, left);
+    const obstacle = createObjectImg(ctx, `obstacle${i}`, obstacleWidth, obstacleHeight, "img/wall.jpg", top, left);
     obstacles.push(obstacle);
 }
 
@@ -204,16 +204,46 @@ for (let i = 1; i <= 2; i++) {
 const slower1 = createObjectImg(ctx, 'slower1', 40, 50, "img/potion.png", randInt(0, canvas.height - 50), randInt(0, canvas.height - 50));
 slowers.push(slower1)
 
+success = false
+endBad = false
+endGood = false
+
 function start() 
 {
-    end = false
+    if (endGood) 
+    {
+        return;
+    }
+
+    if(endBad)
+    {
+        return;
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    player.draw();
+    enemyBase.draw();
+    moneyBase.draw();
+    enemies.forEach(enemy => enemy.draw());
+    obstacles.forEach(obstacle => obstacle.draw());
+    movables.forEach(movable => movable.draw());
+    ammos.forEach(ammo => ammo.draw());
+    slowers.forEach(slower => slower.draw());
 
     ctx.fillStyle = "black";
     ctx.font = "bold 18px Comic Sans MS"
     ctx.fillText(`Pontszám: ${points}`, 10, 20);
     ctx.fillText(`Lőszer: ${playerAmmo}`, canvas.width - 90, 20);
+
+    if(successfulMoney == 2)
+    {
+      console.log('5');
+      ctx.fillStyle = "black";
+      ctx.font = "20px Comic Sans MS"
+      ctx.fillText("Megvan az összes pénz, ugorj ki az ablakon!", canvas.width /3 , 20); 
+      success = true
+    }
 
     drawExplosions();
     
@@ -234,7 +264,10 @@ function start()
     {
             if (checkCollision(enemies[i], player)) 
             {
-                end = true
+                endBad = true
+                ctx.fillStyle = "red";
+                ctx.font = "bold 40px Comic Sans MS"
+                ctx.fillText("VESZTESÉG", canvas.width / 2 , canvas.height / 2); 
             }
     } //enemy player collision
 
@@ -324,45 +357,37 @@ function start()
           }
       }//slower player collision
       
-     for (let i = 0; i < movables.length; i++) 
-     {
-          if (checkCollision(movables[i], moneyBase)) 
+      for (let i = 0; i < movables.length; i++) 
+      {
+           if (checkCollision(movables[i], moneyBase)) 
+           {
+             if (!movables[i].collided) 
+             {
+                 points += 1;
+                 successfulMoney += 1;
+                 movables[i].collided = true; 
+             }
+             movables.splice(i, 1);
+             i -= 1;
+           }
+       } //movable moneyBase collision
+      
+      if (checkCollision(moneyBase, player)) 
           {
-            if (!movables[i].collided) {
-                points += 1;
-                successfulMoney += 1;
-                movables[i].collided = true; 
-                if(successfulMoney == 1)
-                {
-                  console.log('NYERESÉG');
-                  ctx.fillStyle = "black";
-                  ctx.font = "bold 40px Comic Sans MS"
-                  ctx.fillText("NYERESÉG", canvas.width /2 , canvas.height / 2); 
-                  success = true
-                }
+            if (successfulMoney == 2) 
+            {
+                endGood = true;
+                ctx.fillStyle = "green";
+                ctx.font = "bold 40px Comic Sans MS"
+                ctx.fillText("NYERESÉG", canvas.width / 2 , canvas.height / 2); 
             }
-            movables.splice(i, 1);
-            i -= 1;
+
           }
-      } //movable moneyBase collision
 
       movables.forEach(movable => movable.collided = false);
       ammos.forEach(ammo => ammo.collided = false);
       slowers.forEach(slower => slower.collided = false);
 
-    player.draw();
-    enemyBase.draw();
-    moneyBase.draw();
-    enemies.forEach(enemy => enemy.draw());
-    obstacles.forEach(obstacle => obstacle.draw());
-    movables.forEach(movable => movable.draw());
-    ammos.forEach(ammo => ammo.draw());
-    slowers.forEach(slower => slower.draw());
-    
-    if(end)
-    {
-        console.log('VESZTESÉG')
-    }
 }
 
 function startMove()
@@ -404,12 +429,14 @@ document.addEventListener("keydown", function (event)
                     points += 3;
                     const randomIndex = Math.floor(Math.random() * enemies.length);
                     killedEnemy = enemies[randomIndex];
-                    explosions.push({ x: killedEnemy.left, y: killedEnemy.top });
+                    explosions.push({ x: killedEnemy.left - 100, y: killedEnemy.top - 100 });
                     enemies.splice(randomIndex, 1);
                     playerAmmo -= 1;
                     console.log('KILL')
                     console.log(killedEnemy.left)
                     console.log(killedEnemy.top)
+                    console.log(explosions[0].x)
+                    console.log(explosions[0].y)
                 }
              }
                break;           
