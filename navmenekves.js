@@ -260,7 +260,7 @@ function start()
         }
     } //enemy enemy collision 
 
-    for (let i = 0; i < enemies.length - 1; i++) 
+    for (let i = 0; i < enemies.length; i++) 
     {
             if (checkCollision(enemies[i], player)) 
             {
