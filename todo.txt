@@ -2,3 +2,5 @@ robbanas ha veszteseg
 smoothb player movement?
 mas kepeK?
 background
+bájital player speed * 2 enemy speed / 2 helyett
+how to play
