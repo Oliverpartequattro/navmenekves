@@ -221,6 +221,8 @@ function start()
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
+    
+    drawExplosions();
 
     player.draw();
     enemyBase.draw();
@@ -245,7 +247,6 @@ function start()
       success = true
     }
 
-    drawExplosions();
     
     enemies.forEach(enemy => move(enemy, player.left, player.top, enemySpeed));
 
