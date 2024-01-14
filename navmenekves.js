@@ -1,8 +1,6 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-var enemySpeed = 1;
-
 function randInt(min, max) {
     return Math.random() * (max - min) + min;
 }
@@ -128,6 +126,7 @@ function drawExplosions()
 var points = 0
 var successfulMoney = 0
 var playerAmmo = 0
+var enemySpeed = 1;
 var success = false
 var enemies = []
 var obstacles = []
@@ -221,7 +220,7 @@ function start()
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    
+
     drawExplosions();
 
     player.draw();
@@ -235,15 +234,16 @@ function start()
 
     ctx.fillStyle = "black";
     ctx.font = "bold 18px Comic Sans MS"
-    ctx.fillText(`Pontszám: ${points}`, 10, 20);
-    ctx.fillText(`Lőszer: ${playerAmmo}`, canvas.width - 90, 20);
+    ctx.fillText(`Pontszám: ${points}`, 5, 20);
+    ctx.fillText(`Pénz: ${successfulMoney} / 5`, 5, 50);
+    ctx.fillText(`Lőszer: ${playerAmmo}`, 5, 80);
 
-    if(successfulMoney == 2)
+    if(successfulMoney == 5)
     {
       console.log('5');
       ctx.fillStyle = "black";
       ctx.font = "20px Comic Sans MS"
-      ctx.fillText("Megvan az összes pénz, ugorj ki az ablakon!", canvas.width /3 , 20); 
+      ctx.fillText("Megvan az összes pénz, ugorj ki az ablakon!", canvas.width / 3 , 20); 
       success = true
     }
 
@@ -375,7 +375,7 @@ function start()
       
       if (checkCollision(moneyBase, player)) 
           {
-            if (successfulMoney == 2) 
+            if (success) 
             {
                 endGood = true;
                 ctx.fillStyle = "green";
@@ -383,7 +383,7 @@ function start()
                 ctx.fillText("NYERESÉG", canvas.width / 2 , canvas.height / 2); 
             }
 
-          }
+          }//player moneyBase collision
 
       movables.forEach(movable => movable.collided = false);
       ammos.forEach(ammo => ammo.collided = false);
