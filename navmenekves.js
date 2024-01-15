@@ -1,8 +1,14 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-function randInt(min, max) {
+function randInt(min, max) 
+{
     return Math.random() * (max - min) + min;
+}
+
+function controls()
+{
+    return alert('Felfele/lefele nyíl - Menés fel/le\nJobbra/balra nyíl - Menés jobbra/balra\n"P" betű - lövés\nLassító bájital - Lassítja az ellenfeleket fél sebességre')
 }
 
 function createObjectImg(ctx, id, width, height, img, top, left) 
